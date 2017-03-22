@@ -11,12 +11,21 @@ const url = require('url')
 // be closed automatically when the JavaScript object is garbage collected.
 let mainWindow
 
-function createWindow () {
+function createWindow() {
   // Create the browser window.
+  var screenElectron = electron.screen;
+
+  var mainScreen = screenElectron.getPrimaryDisplay();
+  var dimensions = mainScreen.size;
+
   mainWindow = new BrowserWindow({
-    width: 800,
-    height: 600,
-     frame: true})
+    width: 63,
+    height: dimensions.height,
+    frame: false,
+    x: 0,
+    y: 0,
+    resizable: false
+  })
 
   // and load the index.html of the app.
   mainWindow.loadURL(url.format({
@@ -40,6 +49,7 @@ function createWindow () {
     mainWindow = null
   })
 }
+
 
 // This method will be called when Electron has finished
 // initialization and is ready to create browser windows.

@@ -14,16 +14,19 @@ convert_hex2dec()
 
 list_info()
 {
+  
   convert_hex2dec | while read line;
   do
   TYPE=$( xprop -id $line _NET_WM_WINDOW_TYPE | awk -F '=' '{print $2}'   )
   if [ $TYPE != "_NET_WM_WINDOW_TYPE_NORMAL"   ]; then
      continue
   fi
-  CLASS=$(xprop -id $line WM_CLASS | awk -F '=' '{print $2}')
-  NAME=$( xprop -id $line _NET_WM_NAME | awk -F '=' '{print $2}')
+  CLASS=$(xprop -id $line WM_CLASS | awk -F ' = ' '{print $2}')
+  NAME=$( xprop -id $line _NET_WM_NAME | awk -F ' = ' '{print $2}')
+  
   printf "{'xid':'%s','command':[%s],'title':%s},\n" "$line" "$CLASS" "$NAME"
 
   done
+  echo "{'active' : '$(xprop -id $(xprop -root _NET_ACTIVE_WINDOW | cut -d ' ' -f 5) WM_NAME)'}"
 }
 list_info
